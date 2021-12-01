@@ -11,6 +11,7 @@ const reportEl = document.getElementById('report');
 const catchphrasesEl = document.getElementById('catchphrases');
 const catchphraseInput = document.getElementById('catchphrase-input');
 const catchphraseButton = document.getElementById('catchphrase-button');
+const dropDowns = document.querySelectorAll('select');
 
 // set state for how many times the user changes the head, middle, and bottom
 let changeCounter = {
@@ -21,49 +22,34 @@ let changeCounter = {
 // set state for all of the character's catchphrases
 let catchPhrases = [];
 
-headDropdown.addEventListener('change', () => {
-    headEl.textContent = '';
-    // get the value of the head dropdown
-    const head = headDropdown.value;
-    // increment the head change count state
-    changeCounter.head++;
-    // update the dom for the head
-    let img = document.createElement('img');
-    img.src = `./assets/${head}-head.png`;
-    headEl.append(img);
-    // update the stats to show the new count
-    displayStats();
-});
+for (const dropDown of dropDowns) {
+    dropDown.addEventListener('change', (event) => {
+        let part = event.target.dataset.part;
+        let choice = event.target.value;
+        if (part === 'head') {
+            headEl.textContent = '';
+        } else if (part === 'middle') {
+            middleEl.textContent = '';
+        } else if (part === 'bottom') {
+            bottomEl.textContent = '';
+        }
+        changeCounter[part]++;
+        let img = document.createElement('img');
+        if (part === 'bottom') {
+            part = 'pants';
+        }
+        img.src = `./assets/${choice}-${part}.png`;
+        if (part === 'head') {
+            headEl.append(img);
+        } else if (part === 'middle') {
+            middleEl.append(img);
+        } else if (part === 'pants') {
+            bottomEl.append(img);
+        }
 
-
-middleDropdown.addEventListener('change', () => {
-    middleEl.textContent = '';
-    // get the value of the middle dropdown
-    const middle = middleDropdown.value;
-    // increment the middle change count state
-    changeCounter.middle++;
-    // update the dom for the middle
-    let img = document.createElement('img');
-    img.src = `./assets/${middle}-middle.png`;
-    middleEl.append(img);
-    // update the stats to show the new count
-    displayStats();
-});
-
-
-bottomDropdown.addEventListener('change', () => {
-    bottomEl.textContent = '';
-    // get the value of the bottom dropdown
-    const bottom = bottomDropdown.value;
-    // increment the bottom change count state
-    changeCounter.bottom++;
-    // update the dom for the bottom
-    let img = document.createElement('img');
-    img.src = `./assets/${bottom}-pants.png`;
-    bottomEl.append(img);
-    // update the stats to show the new count
-    displayStats();
-});
+        displayStats();
+    });
+}
 
 catchphraseButton.addEventListener('click', () => {
     // get the value of the catchphrase input
