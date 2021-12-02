@@ -1,12 +1,6 @@
 // import functions and grab DOM elements
 import { makeStatsString } from './utils.js';
 
-const headDropdown = document.getElementById('head-dropdown');
-const middleDropdown = document.getElementById('middle-dropdown');
-const bottomDropdown = document.getElementById('bottom-dropdown');
-const headEl = document.getElementById('head');
-const middleEl = document.getElementById('middle');
-const bottomEl = document.getElementById('bottom');
 const reportEl = document.getElementById('report');
 const catchphrasesEl = document.getElementById('catchphrases');
 const catchphraseInput = document.getElementById('catchphrase-input');
@@ -26,29 +20,30 @@ for (const dropDown of dropDowns) {
     dropDown.addEventListener('change', (event) => {
         let part = event.target.dataset.part;
         let choice = event.target.value;
-        if (part === 'head') {
-            headEl.textContent = '';
-        } else if (part === 'middle') {
-            middleEl.textContent = '';
-        } else if (part === 'bottom') {
-            bottomEl.textContent = '';
-        }
+        clearTextContent(part);
         changeCounter[part]++;
         let img = document.createElement('img');
         if (part === 'bottom') {
             part = 'pants';
         }
         img.src = `./assets/${choice}-${part}.png`;
-        if (part === 'head') {
-            headEl.append(img);
-        } else if (part === 'middle') {
-            middleEl.append(img);
-        } else if (part === 'pants') {
-            bottomEl.append(img);
-        }
+        appendImage(part, img);
 
         displayStats();
     });
+}
+
+function clearTextContent(element) {
+    element = eval(element);
+    element.textContent = '';
+}
+
+function appendImage(part, img) {
+    if (part === 'pants') {
+        part = 'bottom';
+    }
+    part = eval(part);
+    part.append(img);
 }
 
 catchphraseButton.addEventListener('click', () => {
